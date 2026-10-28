@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca Oficial de Minecraft - Tienda & Lector</title>
+  <meta name="description" content="Biblioteca oficial de libros de Minecraft con lector interactivo y carrito de compras.">
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- Favicon SVG con forma de libro de Minecraft -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%20width=%2232%22%20height=%2232%22><text y=%2226%22 font-size=%2226%22>⛏️</text></svg>">
+</head>
+<body>
+
+  <!-- ==================== ENCABEZADO / NAVBAR ==================== -->
+  <header class="header">
+    <div class="container nav-content">
+      <div class="logo-group" id="logoReload" title="Volver al inicio">
+        <div class="logo-icon">⛏️</div>
+        <div>
+          <span class="logo-title">Biblioteca de Minecraft</span>
+          <span class="logo-badge">Colección Oficial</span>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <!-- Selector de Tema -->
+        <select id="themeSelector" class="select-theme" title="Seleccionar tema visual">
+          <option value="dark">🌙 Modo Oscuro</option>
+          <option value="light">☀️ Modo Claro</option>
+          <option value="minecraft" selected>🟩 Tema Minecraft</option>
+        </select>
+
+        <!-- Botón del Carrito de Compras -->
+        <button id="btnOpenCart" class="btn btn-primary btn-cart" title="Ver carrito de compras">
+          <span class="cart-icon">🛒</span>
+          <span>Carrito</span>
+          <span class="cart-badge" id="cartBadge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+
+
+  <!-- ==================== CATÁLOGO PRINCIPAL ==================== -->
+  <main class="catalog-section">
+    <div class="container">
+      <div class="section-header-row">
+        <h2 class="section-title" id="catalogTitle">Colección de Libros Oficiales</h2>
+        <span class="results-count" id="resultsCount">Cargando libros...</span>
+      </div>
+
+      <!-- Grid de Libros -->
+      <div class="books-grid" id="booksGrid">
+        <!-- Renderizado dinámico desde JavaScript -->
+      </div>
+    </div>
+  </main>
+
+  <!-- ==================== MODAL DE LECTURA (READER) ==================== -->
+  <div class="modal-overlay" id="readerModal">
+    <div class="reader-modal-box">
+      <!-- Barra superior de herramientas -->
+      <div class="reader-toolbar">
+        <div class="reader-title-info">
+          <div class="reader-book-title" id="readerBookTitle">Título del Libro</div>
+          <div class="reader-book-author" id="readerBookAuthor">Autor</div>
+        </div>
+
+        <div class="reader-controls-group">
+          <!-- Control de Tamaño de Letra -->
+          <button class="reader-btn" id="btnFontSmaller" title="Reducir fuente">A-</button>
+          <button class="reader-btn" id="btnFontBigger" title="Aumentar fuente">A+</button>
+          
+          <!-- Selector de color de fondo del lector -->
+          <div class="reader-theme-selector">
+            <button class="reader-theme-btn theme-sepia" data-readertheme="sepia" title="Modo Sepia"></button>
+            <button class="reader-theme-btn theme-white" data-readertheme="white" title="Modo Blanco"></button>
+            <button class="reader-theme-btn theme-night" data-readertheme="night" title="Modo Noche"></button>
+          </div>
+
+          <!-- Cerrar modal -->
+          <button class="reader-btn" id="btnCloseReader" title="Cerrar Lector">✕ Salir</button>
+        </div>
+      </div>
+
+      <!-- Área de Contenido del Libro -->
+      <div class="reader-body" id="readerBody">
+        <h3 class="reader-chapter-title" id="readerChapterTitle">Capítulo 1</h3>
+        <div id="readerContentText">
+          <!-- Texto del capítulo -->
+        </div>
+      </div>
+
+      <!-- Barra inferior del lector -->
+      <div class="reader-footer">
+        <button class="btn btn-secondary" id="btnPrevPage">⬅ Anterior</button>
+
+        <div class="reader-progress-bar-container">
+          <div class="reader-progress-track">
+            <div class="reader-progress-fill" id="readerProgressFill"></div>
+          </div>
+          <span class="reader-progress-label" id="readerPageIndicator">Pág 1 / 3</span>
+        </div>
+
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-secondary" id="btnToggleReadStatus">
+            <span id="readStatusIcon">✓</span> Marcar Leído
+          </button>
+          <button class="btn btn-primary" id="btnNextPage">Siguiente ➡</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DEL CARRITO DE COMPRAS ==================== -->
+  <div class="modal-overlay" id="cartModal">
+    <div class="cart-modal-box">
+      <div class="cart-modal-header">
+        <div class="cart-title-group">
+          <h3>🛒 Carrito de Compras</h3>
+          <span class="cart-items-count-label" id="cartItemsSubtitle">0 libros agregados</span>
+        </div>
+        <button class="btn-close-modal" id="btnCloseCartModal" title="Cerrar carrito">✕</button>
+      </div>
+
+      <!-- Lista de libros en el carrito -->
+      <div class="cart-modal-body" id="cartItemsContainer">
+        <!-- Renderizado dinámicamente con JS -->
+      </div>
+
+      <!-- Pie del carrito con resumen y botón de compra -->
+      <div class="cart-modal-footer" id="cartModalFooter">
+        <div class="cart-summary-box">
+          <div class="summary-line">
+            <span>Subtotal:</span>
+            <span id="cartSubtotal" class="summary-amount">$0.00</span>
+          </div>
+          <div class="summary-line">
+            <span>Entrega Digital:</span>
+            <span class="text-free">¡GRATIS! ⚡</span>
+          </div>
+          <div class="summary-line total-line">
+            <span>Total a Pagar:</span>
+            <span id="cartTotal" class="summary-total">$0.00</span>
+          </div>
+        </div>
+
+        <div class="cart-actions-row">
+          <button class="btn btn-secondary" id="btnClearCart" title="Vaciar todos los libros del carrito">
+            🗑️ Vaciar
+          </button>
+          <button class="btn btn-primary btn-checkout" id="btnCheckout">
+            💳 Finalizar Compra
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE CONFIRMACIÓN DE COMPRA ==================== -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="checkout-modal-box">
+      <div class="checkout-badge-icon">🎉</div>
+      <h3 class="checkout-title">¡Compra Completada con Éxito!</h3>
+      <p class="checkout-description">
+        Gracias por tu compra en la <strong>Biblioteca Oficial de Minecraft</strong>. Tus libros digitales han sido activados y están listos para leer en tu colección.
+      </p>
+
+      <div class="checkout-receipt" id="checkoutReceipt">
+        <!-- Resumen de libros comprados -->
+      </div>
+
+      <button class="btn btn-primary" id="btnCloseCheckoutModal" style="width: 100%; justify-content: center; padding: 12px;">
+        ✅ Continuar a mi Biblioteca
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenedor para notificaciones Toast -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ==================== PIE DE PÁGINA ==================== -->
+  <footer class="footer">
+    <div class="container">
+      <p>⛏️ <strong>Biblioteca Oficial de Minecraft</strong> — Compatible con Visual Studio y VS Code.</p>
+      <p style="margin-top: 6px; font-size: 0.8rem;">
+        Colección oficial de guías Mojang Studios & HarperCollins.
+        <a href="#" id="btnResetData" style="margin-left: 10px; color: var(--accent);">🔄 Restaurar datos predeterminados</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/books-data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
